@@ -1,0 +1,21 @@
+What the model actually looks at
+Think of it like a security guard watching cars enter a building. Normal people drive in randomly — sometimes fast, sometimes slow, different sized cars. A suspicious person drives in every exactly 30 seconds, same sized car, same route, never stops. That robotic pattern is what the model detects.
+The 6 things it measures per connection:
+1. Outbound variance — how irregular is the timing between packets going OUT. Human browsing is random. Malware beacons like a clock.
+2. Inbound variance — same but for packets coming IN from the server.
+3. Packet count — how many packets in the session. Too few = just a normal request, not beaconing.
+4. Byte count — total data transferred. C2 keep-alives are tiny. Netflix is huge.
+5. Average packet size — C2 heartbeats are small fixed-size packets. Video streaming is large variable packets.
+6. Duration — how long the session lasted. Real beaconing runs for hours. A Google request lasts 0.2 seconds.
+
+Why port 4444 specifically
+You're right that technically any application can use port 4444. The reason it's flagged is purely statistical convention — Metasploit's default listener has been port 4444 since like 2004 and nobody in their right mind changed it, so the entire security industry treats it as a red flag by default.
+Same logic as why police slow down near a car with no license plate — the car might be fine, but statistically it usually isn't.
+The other flagged ports follow the same logic:
+PortWhy suspicious4444Metasploit default1337Classic "leet" hacker port, no legitimate service uses it31337Back Orifice RAT default from the 90s, still used8888Common Cobalt Strike alternative9001Tor default, also used by several RATs6666IRC-based botnets historically used this1234No real service uses this, only test/malware traffic
+
+The honest limitation to mention in viva
+If your professor asks "can this give false positives" — yes it can. A legitimate app using port 4444 would get flagged. A very regular NTP sync could theoretically trigger the heartbeat rule. This is why the model uses multiple conditions together not just one — port + timing + packet size + duration all pointing the same direction is much more reliable than any single signal alone.
+That's actually the correct answer they want — no single indicator is proof, the combination of indicators is what builds confidence.
+
+"Video streaming has large packets, high byte count, and the periodic pattern comes from the server pushing data. C2 beaconing has tiny fixed-size packets, very low byte count, and the periodicity comes from the victim machine initiating outbound contact on a rigid schedule. The model uses packet size, byte count, and outbound variance together — no single feature alone, but the combination separates them clearly."

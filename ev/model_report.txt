@@ -1,0 +1,41 @@
+[+] Training dataset saved to: models\c2_training_dataset.csv  (33 samples)
+[*] Training Random Forest...
+[+] Model saved to: models\c2_random_forest.pkl
+
+=======================================================
+  MODEL EVALUATION REPORT
+=======================================================
+  Training Accuracy (on training data) : 100.0%
+  Cross-Val Accuracy (honest estimate) : 93.9%
+=======================================================
+  CONFUSION MATRIX (Cross-Validation)
+=======================================================
+                  Predicted
+                  Benign    C2
+  Actual Benign      15        2   ← False Positives
+  Actual C2           0       16   ← True Positives
+=======================================================
+  True Positives  (C2 correctly caught)  : 16
+  True Negatives  (Benign correctly ok'd) : 15
+  False Positives (Benign flagged as C2)  : 2  (11.8%)
+  False Negatives (C2 missed entirely)    : 0  (0.0%)
+=======================================================
+              precision    recall  f1-score   support
+
+      Benign      1.000     0.882     0.938        17
+          C2      0.889     1.000     0.941        16
+
+    accuracy                          0.939        33
+   macro avg      0.944     0.941     0.939        33
+weighted avg      0.946     0.939     0.939        33
+
+=======================================================
+  FEATURE IMPORTANCES
+=======================================================
+  outbound_variance     : 0.3428  █████████████
+  inbound_variance      : 0.1772  ███████
+  pkt_count             : 0.0364  █
+  byte_count            : 0.1285  █████
+  avg_pkt_size          : 0.1617  ██████
+  duration              : 0.1535  ██████
+=======================================================
